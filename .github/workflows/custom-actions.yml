@@ -88,3 +88,6 @@ jobs:
 
       - name: Deploy S3
         uses: ./.github/actions/deploy-s3-javascript
+
+      - name: Also Deploy S3 but in Docker
+        uses: ./.github/actions/deploy-s3-docker
