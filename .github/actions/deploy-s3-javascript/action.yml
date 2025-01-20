@@ -1,5 +1,10 @@
 name: Deploy to S3
 description: 'Deploy the website to an S3 bucket'
+inputs:
+  max-cost:
+    description: 'The maximum cost of the deployment'
+    required: true
+    default: '69420'
 runs:
   using: node20
   main: 'main.js'
