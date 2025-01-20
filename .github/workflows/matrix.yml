@@ -9,6 +9,17 @@ jobs:
       matrix:
         node-version: [16, 18, 288]
         runner: [ubuntu-latest, windows-latest]
+        # Use include key, to add very specific combinations
+        # In this case we want to only test node 14 on ubuntu, but not on windows
+        include:
+          - node-version: 14
+            runner: ubuntu-latest
+        # Use exclude key, to exclude very specific combinations
+        # In this case we want to exclude node 16 on windows, but not on ubuntu
+        # Either use include or exclude, depending on what is less verbose or makes more sense
+        exaclude:
+          - node-version: 16
+            runner: windows-latest
     runs-on: ${{ matrix.runner }}
     steps:
       - name: Get Code
