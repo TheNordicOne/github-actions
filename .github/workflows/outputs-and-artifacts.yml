@@ -26,7 +26,7 @@ jobs:
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: dist
+          name: dist-files
           path: dist
           # Upload multiple files under one artifact by using |
           # path: |
@@ -36,5 +36,11 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-files # Downloads the artifact and unzips it. The output will not be in dist folder. Check following step to see the output. This would propably different if we have multiple files in the artifact, like in the example above
+      - name: List files
+        run: ls
       - name: Deploy
         run: echo "Deploying..."
