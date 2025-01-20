@@ -7,6 +7,8 @@ on:
   pull_request:
     branches:
       - main
+      - 'dev-*' # Match any branch that starts with 'dev-' (any character other than slashes)
+      - 'feat/**' # Match any branch that starts with 'feat/' (any character including more slashes)
     # This is also the default types config for pull_request
     types:
       - opened
