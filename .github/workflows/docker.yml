@@ -18,9 +18,7 @@ jobs:
     steps:
       - name: Output GitHub Context
         run: echo "${{ toJson(github) }}"
-      - name: Install wscat for WebSocket connection
-        run: npm install -g wscat
       - name: Check AusweisApp2 status
         run: |
           echo "Checking AusweisApp2 status..."
-          wscat -c ws://ausweisapp:24727/eID-Kernel --headers "User-Agent: GitHub-Action-Check" -x '{"cmd": "GET_INFO"}'
+          curl "http://ausweisapp:24727/eID-Client?Status=json" -H "User-Agent: GitHub-Action-Check"
