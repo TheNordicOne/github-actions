@@ -27,10 +27,11 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: dist
+          path: dist
           # Upload multiple files under one artifact by using |
-          path: |
-            dist/
-            README.md
+          # path: |
+          #   dist/
+          #   README.md
   deploy:
     needs: build
     runs-on: ubuntu-latest
