@@ -1,21 +1,21 @@
 name: Event Demo 1
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-    paths-ignore:
-      - '.github/workflows/*'
-  pull_request:
-    branches:
-      - main
-      - 'dev-*' # Match any branch that starts with 'dev-' (any character other than slashes)
-      - 'feat/**' # Match any branch that starts with 'feat/' (any character including more slashes)
-    # This is also the default types config for pull_request
-    types:
-      - opened
-      - synchronize
-      - reopened
+  # push:
+  #   branches:
+  #     - main
+  #   paths-ignore:
+  #     - '.github/workflows/*'
+  # pull_request:
+  #   branches:
+  #     - main
+  #     - 'dev-*' # Match any branch that starts with 'dev-' (any character other than slashes)
+  #     - 'feat/**' # Match any branch that starts with 'feat/' (any character including more slashes)
+  #   # This is also the default types config for pull_request
+  #   types:
+  #     - opened
+  #     - synchronize
+  #     - reopened
 jobs:
   deploy:
     runs-on: ubuntu-latest
