@@ -73,3 +73,13 @@ jobs:
       
       - name: Deploy site
         run: echo "Deploying..."
+        
+  information:
+    runs-on: ubuntu-latest
+    steps:
+      
+      - name: Get code
+        uses: actions/checkout@v4
+     
+      - name: Deploy S3'
+        uses: ./.github/actions/deploy-s3-javascript
