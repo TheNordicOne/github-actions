@@ -1,0 +1,12 @@
+name: Reusable
+on:
+  workflow_call:
+jobs:
+  info:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Output GitHub Context
+        run: echo "${{ toJson(github) }}"
+
+
+        
