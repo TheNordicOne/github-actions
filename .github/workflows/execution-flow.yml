@@ -91,3 +91,12 @@ jobs:
       
       - name: Deploy
         run: echo "Deploying..."
+  report:
+    if: failure()
+    needs: [lint, test, build, deploy]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Output information
+        run: |
+          echo "This is a report"
+          echo "It runs only if any job failed"
