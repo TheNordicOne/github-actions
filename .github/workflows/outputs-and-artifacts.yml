@@ -16,6 +16,8 @@ jobs:
   build:
     needs: test
     runs-on: ubuntu-latest
+    outputs:
+      script-file: ${{ steps.publish.outputs.local-step-name-script-file }}
     steps:
       - name: Get code
         uses: actions/checkout@v4
@@ -23,6 +25,11 @@ jobs:
         run: npm ci
       - name: Build website
         run: npm run build
+      - name: Publish JavaScript File name
+        id: publish
+        # find dist/assets/*.js -type f -execdir echo '{}' ';' => Regular Linux command that find the JavaScript file in the dist folder, then execute echo command to output the file name
+        # This command is used to set the file name as an output to the STEP. To get hold of it as an output for the job, see above
+        run: find dist/assets/*.js -type f -execdir echo 'local-step-name-script-file={}' >> $GITHUB_OUTPUT ';'
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -42,5 +49,7 @@ jobs:
           name: dist-files # Downloads the artifact and unzips it. The output will not be in dist folder. Check following step to see the output. This would propably different if we have multiple files in the artifact, like in the example above
       - name: List files
         run: ls
+      - name: Output script file name
+        run: echo "Script file is ${{ needs.build.outputs.script-file }}"
       - name: Deploy
         run: echo "Deploying..."
