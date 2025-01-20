@@ -1,6 +1,12 @@
 name: Reusable
 on:
   workflow_call:
+    inputs:
+      artifact:
+        description: 'Name of the artifact to download'
+        required: true
+        type: string
+        default: 'dist-files'
 jobs:
   info:
     runs-on: ubuntu-latest
@@ -9,7 +15,7 @@ jobs:
       - name: Get build artifacts
         uses: actions/download-artifact@v4
         with:
-          name: dist-files
+          name: ${{ inputs.artifact }}
       
       - name: Output contents
         run: ls

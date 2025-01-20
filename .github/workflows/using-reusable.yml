@@ -80,6 +80,8 @@ jobs:
     needs: build
     # Relative to repo root
     uses: ./.github/workflows/reusable.yml
+    with:
+      artifact: dist-files
   report:
     if: failure()
     needs: [lint, test, build, deploy]
