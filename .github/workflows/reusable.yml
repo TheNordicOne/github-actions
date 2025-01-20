@@ -10,9 +10,12 @@ on:
     outputs:
       result:
         description: 'The result of the workflow'
-        value: ${{ steps.deploy.outputs.result }}
+        value: ${{ jobs.deploy.outputs.outcome }}
 jobs:
-  info:
+  deploy:
+    # We have to define this output here, because we can't use the output from the step directly for the workflow output
+    outputs:
+      outcome: ${{ steps.deploy.outputs.result }}
     runs-on: ubuntu-latest
     steps:
       
