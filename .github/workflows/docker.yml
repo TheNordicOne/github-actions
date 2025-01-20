@@ -1,0 +1,14 @@
+name: Docker
+on:
+  workflow_dispatch:
+jobs:
+  info:
+    runs-on: ubuntu-latest
+    # Can only use images that are publicly available
+    container: 
+      image: node:18
+      env:
+        SOME_VAR: 'Moin'
+    steps:
+      - name: Output GitHub Context
+        run: echo "${{ toJson(github) }}"
