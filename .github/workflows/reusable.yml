@@ -15,7 +15,7 @@ jobs:
   deploy:
     # We have to define this output here, because we can't use the output from the step directly for the workflow output
     outputs:
-      outcome: ${{ steps.deploy.outputs.result }}
+      outcome: ${{ steps.set-result.outputs.result }}
     runs-on: ubuntu-latest
     steps:
       
@@ -26,7 +26,10 @@ jobs:
       
       - name: Output contents
         run: ls
-      
+
       - name: Deploy
-        id: deploy
+        run: echo "Deploying..."
+      
+      - name: Set Result
+        id: set-result
         run: echo "result=success" >> $GITHUB_ENV
