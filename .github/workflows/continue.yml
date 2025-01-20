@@ -1,0 +1,109 @@
+name: Continue on Error
+on: workflow_dispatch
+  # push:
+  #   branches:
+  #     - main
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v4
+      
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v4
+        with:
+          # Cache node_modules folder for even faster execution
+          path: node_modules
+          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+      
+      - name: Install dependencies
+        # If cache was found, skip this entire step
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
+      
+      - name: Lint code
+        run: npm run lint
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      
+      - name: Get code
+        uses: actions/checkout@v4
+      
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+      
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
+      
+      - name: Test code
+        id: test
+        # not exactly the same as if: failure() && steps.test.outcome == 'failure'
+        # using the if condition will  make this step fail, but setting continue-on-error to true will show this step as successful even if it fails
+        continue-on-error: true
+        run: npm run test
+      
+      - name: Upload test report
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-report
+          path: test.json
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      
+      - name: Get code
+        uses: actions/checkout@v4
+      
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+      
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
+      
+      - name: Build website
+        id: build-website
+        run: npm run build
+      
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-files
+          path: dist
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      
+      - name: Get build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-files
+      
+      - name: Output contents
+        run: ls
+      
+      - name: Deploy
+        run: echo "Deploying..."
+  report:
+    if: failure()
+    needs: [lint, test, build, deploy]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Output information
+        run: |
+          echo "This is a report"
+          echo "It runs only if any job failed"
