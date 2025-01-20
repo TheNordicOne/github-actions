@@ -14,7 +14,11 @@ async function run() {
         await new Promise(resolve => setTimeout(resolve, 1000)); // 1 second delay
     }
 
-    core.notice('All money spent! 🎉');
+    // Example of running a shell script
+    exec.exec('echo "All money spent! 🎉"');
+
+    // getOctokit helps with interacting with the GitHub API
+    // github.getOctokit()
 }
 
 run();
