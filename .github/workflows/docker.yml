@@ -22,5 +22,5 @@ jobs:
         run: npm install -g wscat
       - name: Check AusweisApp2 status
         run: |
-          wscat -c ws://ausweisapp:24727 -x '{"cmd": "GET_STATUS"}' || true
-          wscat -c ws://ausweisapp:24727 -x '{"cmd": "GET_INFO"}' || true
+          echo "Checking AusweisApp2 status..."
+          wscat -c ws://ausweisapp:24727 -x '{"cmd": "GET_STATUS"}' 2>&1 | tee status.log
