@@ -7,11 +7,12 @@ async function run() {
     core.notice('Starting to spend all your money 💸');
 
     const stepSize = maxCost / 10;
-
+    let remaining = maxCost
     for (let i = 10; i >= 0; i--) {
-        const remaining = (stepSize * i).toFixed(2);
+        remaining = (stepSize * i).toFixed(2);
         core.info(`Remaining budget: $${remaining}`);
         await new Promise(resolve => setTimeout(resolve, 1000)); // 1 second delay
+        
     }
 
     // Example of running a shell script
@@ -19,6 +20,7 @@ async function run() {
 
     // getOctokit helps with interacting with the GitHub API
     // github.getOctokit()
+    core.setOutput('remaining-budget', remaining);
 }
 
 run();

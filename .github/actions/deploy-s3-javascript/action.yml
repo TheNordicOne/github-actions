@@ -5,6 +5,9 @@ inputs:
     description: 'The maximum cost of the deployment'
     required: true
     default: '69420'
+outputs:
+  remaining-budget:
+    description: 'The remaining budget after the deployment'
 runs:
   using: node20
   main: 'main.js'
