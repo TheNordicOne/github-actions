@@ -9,6 +9,18 @@ jobs:
       image: node:18
       env:
         SOME_VAR: 'Moin'
+    # Adding service containers
+    services:
+      ausweisapp:
+        image: governikus/ausweisapp2
+        ports:
+          - 24727:24727
     steps:
       - name: Output GitHub Context
         run: echo "${{ toJson(github) }}"
+      - name: Install wscat for WebSocket connection
+        run: npm install -g wscat
+      - name: Check AusweisApp2 status
+        run: |
+          wscat -c ws://ausweisapp:24727 -x '{"cmd": "GET_STATUS"}' || true
+          wscat -c ws://ausweisapp:24727 -x '{"cmd": "GET_INFO"}' || true
