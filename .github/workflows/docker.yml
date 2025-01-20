@@ -23,4 +23,4 @@ jobs:
       - name: Check AusweisApp2 status
         run: |
           echo "Checking AusweisApp2 status..."
-                    wscat -c ws://ausweisapp:24727/eID-Kernel --headers "User-Agent: GitHub-Action-Check" -x '{"cmd": "GET_INFO"}'
+          wscat -c ws://ausweisapp:24727/eID-Kernel --headers "User-Agent: GitHub-Action-Check" -x '{"cmd": "GET_INFO"}'
