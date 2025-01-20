@@ -9,6 +9,14 @@ jobs:
     steps:
       - name: Get code
         uses: actions/checkout@v4
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          # Cache the cache internal to npm
+          path: ~/.npm
+          # Make sure they key is not static, so that it can be invalidated when the package-lock.json changes
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+
       - name: Install dependencies
         run: npm ci
       - name: Test code
@@ -28,9 +36,7 @@ jobs:
       - name: Cache dependencies
         uses: actions/cache@v4
         with:
-          # Cache the cache internal to npm
           path: ~/.npm
-          # Make sure they key is not static, so that it can be invalidated when the package-lock.json changes
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
 
       - name: Install dependencies
