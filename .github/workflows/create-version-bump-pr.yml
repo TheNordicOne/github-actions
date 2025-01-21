@@ -77,30 +77,7 @@ jobs:
           # Debug git status after
           echo "Git log after version bump:"
           git branch
-      
-      - name: Update Changelog
-        run: |
-          # Store the old content of CHANGELOG.md if it exists
-          if [ -f CHANGELOG.md ]; then
-              old_content=$(cat CHANGELOG.md)
-          fi
 
-          # Generate changelog
-          conventional-changelog -p angular -i CHANGELOG.md -s
-
-          # Check if there are actual changes
-          if [ -f CHANGELOG.md ]; then
-              if [ "$old_content" != "$(cat CHANGELOG.md)" ]; then
-                  echo "Changes detected, committing new CHANGELOG.md"
-                  git add CHANGELOG.md
-                  git commit -m "docs: update CHANGELOG.md for version $version"
-              else
-                  echo "No changes in CHANGELOG.md"
-              fi
-          fi
-      
-      - name: Push changes
-        run: |
           git push origin release/next-version
 
   create_release_pr:

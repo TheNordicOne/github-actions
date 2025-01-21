@@ -58,9 +58,6 @@ jobs:
           
       - name: Get code
         uses: actions/checkout@v4
-      
-      - name: Get and cache dependencies
-        uses: ./.github/actions/cached-deps
 
       - name: Get build artifacts
         uses: actions/download-artifact@v4
@@ -79,19 +76,17 @@ jobs:
           # Read version from package.json
           version=$(jq -r .version package.json)
  
-          # Create zip file of dist folder
-          zip -r dist.zip ./dist
+            # Create zip file of dist folder
+            zip -r dist.zip ./dist
 
-          # Read the latest changelog entry
-          latest_changes=$(awk '/^#+ \[/{p=NR+1}(NR==p){print;exit}' CHANGELOG.md)
-
-          # Create the release using GitHub CLI
-          gh release create "$version" \
-          --title "Release $version" \
-          --notes "$latest_changes" \
-          --draft=false \
-          --prerelease=false \
-          dist.zip
+            # Create the release using GitHub CLI
+            gh release create "$version" \
+            --title "Release $version" \
+            --notes "Automated release for version $version" \
+            --draft=false \
+            --prerelease=false \
+            --generate-notes \
+            dist.zip
 
   cleanup_branch:
     name: Remove release branch
