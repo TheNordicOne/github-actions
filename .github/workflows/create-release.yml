@@ -85,6 +85,7 @@ jobs:
             --notes "Automated release for version $version" \
             --draft=false \
             --prerelease=false \
+            --generate-notes \
             dist.zip
 
   cleanup_branch:
