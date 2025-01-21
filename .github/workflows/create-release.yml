@@ -76,13 +76,16 @@ jobs:
           # Read version from package.json
           version=$(jq -r .version package.json)
  
-          # Create the release using GitHub CLI
-          gh release create "$version" \
+            # Create zip file of dist folder
+            zip -r dist.zip ./dist
+
+            # Create the release using GitHub CLI
+            gh release create "$version" \
             --title "Release $version" \
             --notes "Automated release for version $version" \
             --draft=false \
             --prerelease=false \
-            dist
+            dist.zip
 
   cleanup_branch:
     name: Remove release branch
