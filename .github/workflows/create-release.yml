@@ -84,7 +84,7 @@ jobs:
 
           # Read the latest changelog entry
           latest_changes=$(awk '/^#+ \[/{p=NR+1}(NR==p){print;exit}' CHANGELOG.md)
-          
+
           # Create the release using GitHub CLI
           gh release create "$version" \
           --title "Release $version" \

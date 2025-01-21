@@ -56,7 +56,7 @@ jobs:
 
       - name: Get and cache dependencies
         uses: ./.github/actions/cached-deps
-
+        
       - name: Bump version
         id: version-bump
         run: |
@@ -66,8 +66,6 @@ jobs:
 
           # Get the recommended bump (major, minor, or patch)
           bump=$(conventional-recommended-bump -p angular)
-
-          echo "Bumping version with $bump"
 
           VERSION=$(npm version $bump -m "Upgrade to %s")
           echo "version=$VERSION" >> $GITHUB_OUTPUT
@@ -82,7 +80,7 @@ jobs:
           if [ -f CHANGELOG.md ]; then
               old_content=$(cat CHANGELOG.md)
           fi
-          
+
           # Generate changelog
           conventional-changelog -p angular -i CHANGELOG.md -s
 
