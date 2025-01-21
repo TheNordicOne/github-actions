@@ -12,8 +12,8 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
       
-      - name: Install dependencies
-        run: npm ci
+      - name: Get and cache dependencies
+        uses: ./.github/actions/cached-deps
 
       - name: Lint code
         run: npm run lint
@@ -54,6 +54,9 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Get and cache dependencies
+        uses: ./.github/actions/cached-deps
+        
       - name: Bump version
         id: version-bump
         run: |
