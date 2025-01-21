@@ -101,4 +101,4 @@ jobs:
           git checkout -b release/next-version
 
           # Create PR
-          gh pr create --base main --head release/next-version --title "Release ${{ needs.bump_version.outputs.version }}" --body "Release ${{ needs.bump_version.outputs.version }} -label "release"
+          gh pr create --base main --head release/next-version --title "Release ${{ needs.bump_version.outputs.version }}" --body "Release ${{ needs.bump_version.outputs.version }}" -label "release"
