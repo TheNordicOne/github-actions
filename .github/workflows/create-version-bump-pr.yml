@@ -34,9 +34,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Get and cache dependencies
-        uses: ./.github/actions/cached-deps
-
       - name: Create Release Branch
         run: |
           git checkout -b release/next-version
