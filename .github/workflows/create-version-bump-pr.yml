@@ -2,16 +2,6 @@ name: Bump Version
 
 on:
   workflow_dispatch:
-    inputs:
-      version_type:
-        type: choice
-        description: 'Version type to bump'
-        required: true
-        options:
-          - major
-          - minor
-          - patch
-        default: 'minor'
 
 jobs:
   build_and_test:
@@ -71,7 +61,10 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          VERSION=$(npm version ${{ inputs.version_type }} -m "Upgrade to %s")
+          # Get the recommended bump (major, minor, or patch)
+          bump=$(conventional-recommended-bump -p angular)
+
+          VERSION=$(npm version $bump -m "Upgrade to %s")
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
           # Debug git status after
