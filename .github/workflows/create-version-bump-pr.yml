@@ -47,7 +47,7 @@ jobs:
       - name: Create Release Branch
         run: |
           git checkout -b release/next-version
-          git push origin release/next-version
+          git push origin release/next-version --force
 
   bump_version:
     needs: create_release_branch
@@ -101,4 +101,4 @@ jobs:
           git checkout -b release/next-version
 
           # Create PR
-          gh pr create --base main --head release/next-version --title "Release ${{ needs.bump_version.outputs.version }}" --body "Release ${{ needs.bump_version.outputs.version }}"
+          gh pr create --base main --head release/next-version --title "Release ${{ needs.bump_version.outputs.version }}" --body "Release ${{ needs.bump_version.outputs.version }} -label "release"
