@@ -85,26 +85,22 @@ jobs:
           # Store the old content of CHANGELOG.md if it exists
           if [ -f CHANGELOG.md ]; then
               old_content=$(cat CHANGELOG.md)
-          else
-              old_content=""  # Explicitly set to empty if file didn't exist
           fi
-
+          
           # Generate changelog
           conventional-changelog -p angular -i CHANGELOG.md -s
 
-          # Check status
-          git status
-
-          # Check if there are actual changes or if it's a new file
+          # Check if there are actual changes
           if [ -f CHANGELOG.md ]; then
-              if [ ! -n "$old_content" ] || [ "$old_content" != "$(cat CHANGELOG.md)" ]; then
-                  echo "Changes detected or new CHANGELOG.md created, committing..."
+              if [ "$old_content" != "$(cat CHANGELOG.md)" ]; then
+                  echo "Changes detected, committing new CHANGELOG.md"
                   git add CHANGELOG.md
                   git commit -m "docs: update CHANGELOG.md for version $version"
               else
                   echo "No changes in CHANGELOG.md"
               fi
           fi
+      
       - name: Push changes
         run: |
           git push origin release/next-version
