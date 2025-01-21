@@ -1,0 +1,98 @@
+name: Bump Version
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_type:
+        type: choice
+        description: 'Version type to bump'
+        required: true
+        options:
+          - major
+          - minor
+          - patch
+        default: 'minor'
+
+jobs:
+  build_and_test:
+    name: Build and Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint code
+        run: npm run lint
+
+      - name: Test
+        run: npm run test
+
+  create_release_branch:
+    needs: build_and_test
+    name: Create Release Branch
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create Release Branch
+        run: |
+          git checkout -b release/next-version
+          git push origin release/next-version
+
+  bump_version:
+    needs: create_release_branch
+    name: Bump Version
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Bump version
+        run: |
+          git checkout release/next-version
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          VERSION=$(npm version ${{ inputs.version_type }} -m "Upgrade to %s")
+          CLEAN_VERSION=$(echo $VERSION | sed 's/^v//')
+          SOLUTION_VERSION="${CLEAN_VERSION}.0"
+          jq --arg version "$SOLUTION_VERSION" '.solution.version = $version' config/package-solution.json > tmp.$$.json && mv tmp.$$.json config/package-solution.json
+          
+          git commit --amend
+
+          # Debug git status after
+          echo "Git log after version bump:"
+          git branch
+
+          echo "new_version=${CLEAN_VERSION}"
+          echo "new_version=${CLEAN_VERSION}" >> $GITHUB_ENV
+
+  create_release_pr:
+    needs: bump_version
+    name: Create Release PR
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create Release PR
+        run: |
+          git checkout -b release/next-version
+          git push origin release/next-version
+
+          # Create PR
+          gh pr create --base main --head release/next-version --title "Release ${CLEAN_VERSION}" --body "Release ${CLEAN_VERSION}"
