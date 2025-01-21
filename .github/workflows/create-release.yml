@@ -44,7 +44,10 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: dist-files
-          path: dist
+          path: | 
+            dist
+            package.json
+
 
   create_release:
     name: Create Release
@@ -57,6 +60,9 @@ jobs:
         with:
           name: dist-files
           path: ./dist
+      
+      - name: Output contents
+        run: ls -R
 
       - name: Create Release
         id: create_release
