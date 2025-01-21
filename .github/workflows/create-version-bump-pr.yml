@@ -57,10 +57,11 @@ jobs:
       - name: Get and cache dependencies
         uses: ./.github/actions/cached-deps
 
-      - name: Install conventional-recommended-bump
+      - name: Install additional dependencies
         run: | 
           npm install -g conventional-recommended-bump
-          npm install -g conventional-changelog-cli 
+          npm install -g conventional-changelog-cli
+          npm install -g conventional-changelog-angular
 
       - name: Bump version
         id: version-bump
