@@ -82,7 +82,6 @@ jobs:
             # Create the release using GitHub CLI
             gh release create "$version" \
             --title "Release $version" \
-            --notes "Automated release for version $version" \
             --draft=false \
             --prerelease=false \
             --generate-notes \
