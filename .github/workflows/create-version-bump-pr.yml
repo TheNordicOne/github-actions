@@ -55,6 +55,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    outputs:
+      version: ${{ steps.version-bump.outputs.version }}
 
     steps:
       - name: Checkout Repository
@@ -63,12 +65,14 @@ jobs:
           fetch-depth: 0
 
       - name: Bump version
+        id: version-bump
         run: |
           git checkout release/next-version
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
           VERSION=$(npm version ${{ inputs.version_type }} -m "Upgrade to %s")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
 
           # Debug git status after
           echo "Git log after version bump:"
@@ -93,4 +97,4 @@ jobs:
           git push origin release/next-version
 
           # Create PR
-          gh pr create --base main --head release/next-version --title "Release ${CLEAN_VERSION}" --body "Release ${CLEAN_VERSION}"
+          gh pr create --base main --head release/next-version --title "Release ${{ needs.bump_version.outputs.version }}" --body "Release ${{ needs.bump_version.outputs.version }}"
