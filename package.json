@@ -22,6 +22,8 @@
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
     "@vitejs/plugin-react": "^2.0.1",
+    "conventional-changelog-cli": "^5.0.0",
+    "conventional-recommended-bump": "^10.0.0",
     "eslint": "^8.23.0",
     "eslint-plugin-react": "^7.31.1",
     "jsdom": "^20.0.0",
