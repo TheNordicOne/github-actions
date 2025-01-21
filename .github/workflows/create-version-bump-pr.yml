@@ -78,6 +78,8 @@ jobs:
           echo "Git log after version bump:"
           git branch
 
+          git push origin release/next-version
+
   create_release_pr:
     needs: bump_version
     name: Create Release PR
